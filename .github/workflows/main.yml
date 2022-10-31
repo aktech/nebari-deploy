@@ -43,6 +43,21 @@ jobs:
         uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
+
+      - name: Create secrets file for GCP
+        if: ${{ inputs.ciprovider }} == 'gcp'
+        run:
+          echo $GOOGLE_CREDENTIALS > /tmp/gcp.json
+          echo "GOOGLE_CREDENTIALS=/tmp/gcp.json" >> $GITHUB_ENV
+
+      - name: Set up gcloud Cloud SDK environment
+        if: ${{ inputs.ciprovider }} == 'gcp'
+        uses: google-github-actions/setup-gcloud@v0.6.0
+        with:
+          project_id: ${{ secrets.PROJECT_ID }}
+          service_account_key: ${{ secrets.GOOGLE_CREDENTIALS }}
+          export_default_credentials: true
+
       - name: Nebari Init and Deployment Trigger
         uses: ./.github/actions/nebari
         with:
