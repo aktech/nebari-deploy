@@ -47,7 +47,7 @@ jobs:
       - name: Create secrets file for GCP
         if: ${{ inputs.ciprovider }} == 'gcp'
         run:
-          echo $GOOGLE_CREDENTIALS > /tmp/gcp.json
+          echo $GCP_CREDENTIALS > /tmp/gcp.json
           echo "GOOGLE_CREDENTIALS=/tmp/gcp.json" >> $GITHUB_ENV
 
       - name: Set up gcloud Cloud SDK environment
